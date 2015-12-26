@@ -1,0 +1,746 @@
+﻿<UserControl x:Class="Quick_Note.TextBlocks"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="auto"
+             Height="110">
+
+    <UserControl.Resources>
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="0"
+                            Padding="0" 
+                            CornerRadius="0" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="green" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Width="auto" Margin="0,0,0,-1">
+
+        <Label x:Name="blockDate" Content="" VerticalAlignment="Top" Height="26" Foreground="Gray" Margin="5,10,47,0" />
+        <Label x:Name="blockName" Content="" VerticalAlignment="Top" Height="26" Foreground="Gray" Margin="5,34,0,0" HorizontalAlignment="Left" Width="170"/>
+
+        <RichTextBox Name="blockTexing" Margin="10,65,10,13" Cursor="Hand"  GotFocus="Focused_RichTextBlock"  AcceptsReturn="True"  VerticalScrollBarVisibility="Visible" FontSize="20">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </RichTextBox.Resources>
+            <RichTextBox.Effect>
+                <DropShadowEffect Direction="270" ShadowDepth="2" Opacity="0.5" BlurRadius="10"/>
+            </RichTextBox.Effect>
+            <FlowDocument/>
+        </RichTextBox>
+
+        <!--Delete Icon-->
+        <Button  Cursor="Hand" Style="{StaticResource MyButtonStyle}" Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave"  Margin="0,10,10,0" HorizontalAlignment="Right" Width="35" Height="35" VerticalAlignment="Top" Click="delete_Click"  Foreground="{x:Null}" BorderBrush="{x:Null}" Background="#02EAE8E8">
+            <Button.ToolTip>
+                <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                    <ToolTip.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                    </ToolTip.Effect>
+                    <ToolTip.Template>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border >
+                                <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                    <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="-90"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Delete this Quick Note" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </ToolTip.Template>
+                </ToolTip>
+            </Button.ToolTip>
+            <Viewbox   >
+                <Grid Width="128" Height="128" Visibility="Visible" >
+
+                    <Path Name="delete" Data="M13.562925,9.5455866C10.334719,9.5480862 7.9215851,10.943875 6.1898308,12.462163 4.9320183,13.568854 4.0944252,14.729145 3.7164955,15.30724L3.7164955,38.740654C5.8798904,36.820068,9.1908169,34.881184,13.554424,34.881184L13.562925,34.881184C18.006834,34.881184,21.39064,36.883869,23.595144,38.830452L23.595144,15.32664C23.498745,15.180841 23.372145,15.002442 23.215244,14.795545 22.771244,14.208149 22.092543,13.411455 21.20904,12.623662 19.423536,11.042874 16.892033,9.5455866 13.562925,9.5455866z M45.994334,8.6716328C44.902235,8.6716328 44.015537,9.5558024 44.015537,10.650913 44.015537,11.742023 44.902235,12.631233 45.994334,12.631233L57.564907,12.631233C58.656704,12.631233 59.543402,11.742023 59.543402,10.650913 59.543402,9.5558024 58.656704,8.6716328 57.564907,8.6716328z M13.562925,5.8320065C18.060234,5.8306656 21.475641,7.8827796 23.678745,9.8501835 24.367647,10.463479 24.951548,11.075374 25.427448,11.626169 25.887449,11.079374 26.450651,10.472579 27.118852,9.863184 29.277356,7.8866797 32.657263,5.8281059 37.157272,5.8320065 37.731473,5.832006 38.286874,5.8658257 38.825276,5.9283848 38.394274,7.1171556 38.127374,8.3476162 38.032274,9.5950861 37.745173,9.5702858 37.457473,9.5455866 37.157272,9.5455866 33.928766,9.5480862 31.514661,10.943875 29.784557,12.462163 28.524455,13.568854 27.686553,14.730345 27.310252,15.30724L27.310252,38.745853C29.474357,36.822769 32.786563,34.878685 37.157272,34.881184 41.600081,34.881184 44.985487,36.882568 47.189892,38.827854L47.189892,23.650974C48.395594,24.07407,49.644297,24.327969,50.905999,24.406069L50.905999,43.835514 47.439192,44.758705 47.436992,44.758705 47.434692,44.758705C47.390692,44.685806 47.353292,44.625908 47.300592,44.544006 47.195792,44.385208 47.031991,44.144211 46.80969,43.847313 46.36369,43.260017 45.687289,42.463223 44.803487,41.67543 43.017084,40.093441 40.486779,38.598656 37.157272,38.596153 33.928766,38.598656 31.514661,39.997044 29.784557,41.512733 28.088354,43.006321 27.157952,44.593407 27.085352,44.721004L27.084752,44.721004 27.082452,44.730106C26.767652,45.303001 26.156651,45.695 25.453548,45.695 24.763447,45.695 24.163847,45.316101 23.843445,44.758705L23.842245,44.758705C23.797945,44.685806 23.759846,44.625908 23.707445,44.544006 23.601946,44.385208 23.437244,44.144211 23.215244,43.847313 22.771244,43.260017 22.092543,42.463223 21.20904,41.67543 19.423536,40.093441 16.892033,38.598656 13.562925,38.596153 10.334719,38.598656 7.9215851,39.997044 6.1898308,41.512733 4.4720573,43.025719 3.5368042,44.635208 3.4889565,44.730106L3.480835,44.724907 0,43.835514 0,14.785145 0.22821045,13.894451C0.2946167,13.781153 1.3512611,11.847568 3.5244141,9.863184 5.6826286,7.8866797 9.0625172,5.8281059 13.562925,5.8320065z M51.535834,4.4408921E-15C54.261415,-8.0463677E-08 56.987011,1.0394082 59.066605,3.1182242 63.225794,7.2796478 63.225794,14.021948 59.066605,18.18079 54.907415,22.339735 48.164228,22.339735 44.005138,18.18079 39.844949,14.021948 39.844949,7.2796478 44.005138,3.1182242 46.084683,1.0394082 48.810252,-8.0463677E-08 51.535834,4.4408921E-15z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" />
+                </Grid>
+            </Viewbox>
+        </Button>
+
+        <!--Star Icon-->
+        <Button MouseEnter="star_MouseEnter" MouseLeave="star_MouseLeave" Background="#02EAE8E8"  Height="20" Width="20"  Click="star_Click" Style="{StaticResource MyButtonStyle}" Margin="0,40,55,0" HorizontalAlignment="Right"  VerticalAlignment="Top" Cursor="Hand" BorderBrush="{x:Null}" Foreground="{x:Null}" >
+            <Button.ToolTip>
+                <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                    <ToolTip.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                    </ToolTip.Effect>
+                    <ToolTip.Template>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border >
+                                <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                    <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="-90"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Label Margin="10,-6,10,0" FontSize="15" Content="Click to add to Favorite" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </ToolTip.Template>
+                </ToolTip>
+            </Button.ToolTip>
+            <Viewbox>
+                <Grid  Width="128" Height="128" Visibility="Visible" >
+                    <Path Name="star" Opacity="0.5"  Data="M383.519,0L501.986,252.479 767,292.964 575.223,489.496 620.525,767 383.519,635.979 146.475,767 191.74,489.496 0,292.964 265.014,252.479z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0">
+                    </Path>
+                </Grid>
+            </Viewbox>
+
+        </Button>
+
+        <StackPanel  Cursor="Hand" Name="toolStack" Orientation="Horizontal" Width="0" Margin="0,35,116,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" >
+
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="CommandTarget" Value="{Binding ElementName=blockTexting}" />
+                </Style>
+            </StackPanel.Resources>
+
+            <Button Click="btnSave_Click" Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="2,8,2,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Save this Quick Note" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="17" Height="17" Visibility="Visible">
+                        <Path Data="M8.1099597,36.94997L8.1099597,41.793968 39.213959,41.793968 39.213959,36.94997z M12.42,0.049999889L18.4,0.049999889 18.4,12.252 12.42,12.252z M0,0L7.9001866,0 7.9001866,14.64218 39.210766,14.64218 39.210766,0 47.401001,0 47.401001,47.917 0,47.917z" Stretch="Uniform" Fill="Gray" Width="17" Height="17" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button Click="export_Click" Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="20,8,2,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-190" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="400"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Export this Quick Note to Desktop" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="17" Height="17" Visibility="Visible">
+                        <Path Data="M36.199,45.667C36.952227,46.010012,37.781757,46.213219,38.662689,46.213219L49.918999,46.213219 49.918999,59.145964C49.918999,62.927294 46.840787,66.003 43.057449,66.003 39.277212,66.003 36.199,62.927294 36.199,59.145964z M59.649792,24.517794C60.029982,24.531191,60.454393,24.714476,60.900433,25.085843L64.15827,27.807174C65.741682,29.130087,68.330208,31.294212,69.91362,32.614528L73.171455,35.338458C74.754669,36.661471,74.733971,38.802097,73.129654,40.09381L69.822426,42.755239C68.215605,44.052156,65.587978,46.169378,63.981163,47.458494L60.673834,50.12252C59.069715,51.419437,57.775402,50.336124,57.798807,47.718895L57.843107,42.690142 38.66262,42.690142C37.311006,42.690142,36.215998,41.593826,36.215998,40.242211L36.215998,34.942752C36.215998,33.593738,37.311006,32.494726,38.66262,32.494726L57.934206,32.494726 57.978508,27.439969C57.995398,25.558836,58.678194,24.483558,59.649792,24.517794z M5.6630898,22.645999C8.7816372,22.645999,11.33,25.200673,11.33,28.317742L11.33,46.348759C11.33,49.463427 8.7816372,52.018 5.6630898,52.018 2.5508919,52.018 0,49.463427 0,46.348759L0,28.317742C0,25.200673,2.5508919,22.645999,5.6630898,22.645999z M43.057449,7.6749992C46.840787,7.6749992,49.918999,10.75035,49.918999,14.531539L49.918999,28.971116 38.662689,28.971116C37.781757,28.971116,36.952227,29.17441,36.199,29.518001L36.199,14.531539C36.199,10.75035,39.277212,7.6749992,43.057449,7.6749992z M22.61695,0C26.210511,0,29.131,2.9245415,29.130999,6.5130177L29.130999,38.786243C29.131,42.374819 26.210511,45.294001 22.61695,45.294001 19.027187,45.294001 16.108,42.374819 16.108,38.786243L16.108,6.5130177C16.108,2.9245415,19.027187,0,22.61695,0z" Stretch="Uniform" Fill="Gray" Width="17" Height="17" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Text size icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="20,8,2,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Text Size" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M18.31245,0.85700001L21.333,5.0627424 18.995216,5.0627424 18.995216,15.71097 21.333,15.71097 18.31245,19.918001 15.291,15.71097 17.628785,15.71097 17.628785,5.0627424 15.291,5.0627424z M0,0L1.4206324,0 12.082359,0 13.503,0 13.503,1.9908203 13.503,5.0155799 12.934684,5.0155799 12.420269,1.9908203 7.7456498,1.9908203 7.7456498,18.749813 9.9117341,18.749813 9.9117341,20.168998 4.0189199,20.168998 4.0189199,18.749813 5.7567015,18.749813 5.7567015,1.9908203 1.0827322,1.9908203 0.56770515,5.0155799 0,5.0155799 0,1.9908203z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--add/minus text size-->
+            <StackPanel Orientation="Vertical"  Margin="0,8,2,0">
+                <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="plusSizeButton" Click="plusSizeButton_Click" Height="8" Width="8" Style="{StaticResource MyButtonStyle}" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="0,0,0,0">
+                    <Button.ToolTip>
+                        <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                            <ToolTip.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                            </ToolTip.Effect>
+                            <ToolTip.Template>
+                                <ControlTemplate TargetType="ToolTip">
+                                    <Border >
+                                        <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                            <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                                <Path.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Path.RenderTransform>
+                                            </Path>
+                                            <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Enlarge the Text size" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </ToolTip.Template>
+                        </ToolTip>
+                    </Button.ToolTip>
+
+                    <Viewbox Height="8" Width="8">
+                        <Grid Width="48" Height="48" Visibility="Visible">
+
+                            <Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z" Stretch="Uniform" Fill="Gray" Width="48" Height="48" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                            </Path>
+                        </Grid>
+                    </Viewbox>
+                </Button>
+
+                <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="minusSizeButton" Click="minusSizeButton_Click"  Height="8" Width="8" Style="{StaticResource MyButtonStyle}" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="0,2,0,0">
+                    <Button.ToolTip>
+                        <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                            <ToolTip.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                            </ToolTip.Effect>
+                            <ToolTip.Template>
+                                <ControlTemplate TargetType="ToolTip">
+                                    <Border >
+                                        <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                            <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                                <Path.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Path.RenderTransform>
+                                            </Path>
+                                            <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Reduce the Text size" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </ToolTip.Template>
+                        </ToolTip>
+                    </Button.ToolTip>
+
+                    <Viewbox Height="8" Width="8">
+                        <Grid Width="48" Height="48" Visibility="Visible">
+
+                            <Path Data="M0,0L53.333,0 53.333,8.888 0,8.888z" Stretch="Uniform" Fill="Gray" Width="48" Height="48" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            </Path>
+                        </Grid>
+                    </Viewbox>
+                </Button>
+            </StackPanel>
+
+            <ComboBox  Name="fontCombo"  HorizontalAlignment="Right" Height="20" Margin="0,5,0,0"  Text="" VerticalAlignment="Top" Width="47" SelectionChanged="ComboBox_SelectionChanged">
+                <TextBlock  Background="{x:Null}" Text="6" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="7" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="8" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="9" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="10" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="11" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="12" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="14" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="16" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="18" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="20" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="22" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="24" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="36" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="48" Foreground="Black"/>
+                <TextBlock  Background="{x:Null}" Text="72" Foreground="Black"/>
+            </ComboBox>
+
+            <!--Upper Case Letters icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="upperButton" Click="upperButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="10,0,0,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to change to Upper/Lower case" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M0,10.620999L9.2090001,10.620999 9.2090001,13.275792 8.6933789,13.275792 8.4480186,11.833251 5.2109516,11.833251 5.2109516,19.563337 6.244884,19.563337 6.244884,20.506001 3.168707,20.506001 3.168707,19.563337 3.9974488,19.563337 3.9974488,11.833251 0.76110959,11.833251 0.51562619,13.275792 0,13.275792z M2.2709997,0L3.7151059,0 19.888294,0 21.333,0 21.333,2.0233906 21.333,5.0988756 20.754797,5.0988756 20.231997,2.0233906 12.812764,2.0233906 12.812764,19.062035 15.015173,19.062035 15.015173,20.506001 9.0237179,20.506001 9.0237179,19.062035 10.790556,19.062035 10.790556,2.0233906 3.3719646,2.0233906 2.8485222,5.0988756 2.2709997,5.0988756 2.2709997,2.0233906z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--HighLight Text icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="highLightButton" Click="highLightButton_Click" Style="{StaticResource MyButtonStyle}" Width="18" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="10,0,0,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to HighLight selected Text" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="18" Height="18">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M9.6299452,58.582001L56.357001,58.582001C57.74697,58.582001 58.873949,59.708366 58.873949,61.098948 58.873949,62.489731 57.74697,63.615997 56.357001,63.615997L9.6299452,63.615997C8.2389731,63.615997 7.113996,62.489731 7.1139965,61.098948 7.113996,59.708366 8.2389731,58.582001 9.6299452,58.582001z M18.822331,26.278175L14.038067,31.062098 27.369219,44.393606 32.154593,39.608841z M39.371367,5.7306042L21.454899,23.645794 34.786448,36.977316 52.703272,19.062763z M39.372366,0C40.10536,0,40.838355,0.27869415,41.395354,0.83600998L57.59624,17.037937C58.713232,18.149952,58.713232,19.967674,57.59624,21.089489L26.04946,52.633492C25.492463,53.193499 24.759469,53.472002 24.026474,53.472002 23.29148,53.472002 22.557484,53.193499 22.000489,52.633492L20.714425,51.347339 2.6748063,58.346807C1.9268294,58.467213 1.0098494,58.214605 0.61184517,57.818794 0.072850123,57.278383 -0.13118769,56.488064 0.084813133,55.755548L7.0824961,37.714466 5.799602,36.431485C4.683609,35.31947,4.6846089,33.499247,5.799602,32.382633L37.34738,0.83600998C37.906378,0.27869415,38.638373,0,39.372366,0z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Underline Letters icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Click="underlineButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Underline the Text" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M2.1350004,55.547001L44.801998,55.547001 44.801998,63.547001 2.1350004,63.547001z M0,0L21.950499,0 21.950499,6.2215548 19.791699,6.2215548C18.802098,6.2215543 18.098999,6.3387351 17.679699,6.5770268 17.260498,6.8139591 16.954498,7.1511827 16.760498,7.5913162 16.567698,8.0300999 16.471499,8.9273272 16.471499,10.281389L16.471499,26.657932C16.471499,29.709959 16.777298,31.987379 17.390698,33.491291 18.003998,34.995106 18.929699,36.138512 20.167998,36.924919 21.406298,37.707428 22.907599,38.100632 24.674498,38.100632 26.438799,38.100632 28.010498,37.669727 29.389298,36.810421 30.766897,35.950813 31.749998,34.861107 32.342495,33.538193 32.936196,32.216579 33.231896,30.032961 33.231896,26.980734L33.231896,8.9273272C33.231896,8.1773214 33.135395,7.6407561 32.942795,7.317874 32.684895,6.8868399 32.339798,6.588737 31.910198,6.415586 31.609499,6.2866149 30.846398,6.2215543 29.622399,6.2215548L27.880198,6.2215548 27.880198,0 46.447998,0 46.447998,6.2215548 44.997498,6.2215548C43.557297,6.2215543 42.664097,6.306025 42.322895,6.4793062 41.805996,6.7371187 41.429695,7.1134019 41.192795,7.6082163 41.020897,7.931159 40.934895,8.8218565 40.934895,10.281389L40.934895,28.011944C40.934895,31.278973 40.463597,34.016098 39.518196,36.229515 38.205696,39.241344 36.117195,41.577362 33.248795,43.242577 30.377598,44.908089 26.977898,45.739998 23.046898,45.739998 20.274798,45.739998 17.791699,45.315594 15.600299,44.467884 13.408899,43.61758 11.489599,42.404072 9.846409,40.823254 8.2032196,39.244041 7.0534698,37.575928 6.3985302,35.810413 5.7422797,34.048599 5.41415,31.448273 5.4141504,28.011944L5.4141504,10.636892C5.41415,9.0483589 5.3281295,8.0222292 5.1562497,7.5587158 4.9843795,7.0977821 4.7057197,6.7579288 4.3177192,6.5443072 3.93106,6.3295851 3.1797199,6.2215543 2.0625305,6.2215548L0,6.2215548z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Strike through Letters icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="crossButton" Click="crossButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Strike through Text" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="17" Height="17">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M350.93,0C401.516,4E-06 445.958,8.32351 484.373,25.3539 522.711,42.0009 551.15,64.3247 569.611,92.704 588.072,121.083 600.729,158.923 607.579,206.6L500.117,222.873C495.017,185.034 480.836,155.518 457.497,134.331 434.197,112.76 401.255,102.164 358.598,102.164 308.051,102.164 271.945,111.624 250.319,130.922 228.768,149.841 217.936,171.791 217.936,196.762 217.936,213.413 222.477,228.171 231.56,241.035 240.679,253.899 254.599,264.874 273.36,273.955 284.712,278.495 317.096,289.092 370.546,305.739 429.246,323.148 474.472,338.28 506.372,351.148L767,351.148 767,415.473 594.961,415.473C598.421,420.392 602.815,423.796 605.866,428.716 623.473,457.474 632.294,493.045 632.294,535.425 632.294,576.668 621.462,615.265 599.872,651.968 578.285,688.67 547.465,717.05 507.376,736.727 467.286,756.783 421.69,767 370.546,767 286.425,767 222.366,746.944 178.294,707.59 134.222,667.862 105.971,609.209 93.4645,531.642L202.562,512.343C208.257,561.531 225.008,599.371 252.888,625.482 280.766,651.589 319.663,664.457 369.692,664.457 420.275,664.457 457.795,653.104 482.213,630.023 506.669,606.562 518.878,579.319 518.878,547.91 518.878,520.288 508.046,497.964 486.495,481.313 471.716,470.342 434.197,456.716 373.972,439.691 344.267,431.367 319.106,423.418 296.101,415.473L0,415.473 0,351.148 167.164,351.148C154.769,339.416 144.348,325.794 136.085,310.279 120.191,280.389 112.223,247.469 112.223,212.277 112.223,179.357 118.775,149.084 131.802,121.083 144.906,93.0828 162.772,70.0015 185.516,51.0819 202.562,37.0816 225.901,24.9751 255.455,15.1366 285.01,5.29804 316.798,4E-06 350.93,0z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Italic Text icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="italicButton" Click="italicButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="3,8,3,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to change to Italic style" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M190.859403386712,0L453.999997869134,0 448.488157048821,12.4807367324829C427.036893621087,12.2636260986328 411.150632634759,13.8429794311523 400.765287175775,17.2118072509765 385.708982244134,21.7327423095703 374.249173894525,28.1867294311523 366.353849187493,36.5772628784179 358.50103546679,44.8977584838867 348.371274724603,63.4017562866211 335.985654607415,92.0157241821289L217.9501016289,368.920806884766C207.256452336907,394.453125 201.882932439446,410.663360595703 201.882932439446,417.691711425781 201.882932439446,423.357727050781 203.989743962884,428.088775634766 208.171537175775,432.10546875 212.353162541986,436.052093505859 219.035489812493,439.063720703125 228.29270721972,441.213897705078 237.44358612597,443.367553710938 256.649869695306,445.086975097656 285.762296453118,446.449249267578L280.250608220696,459 0,459 7.05461622774601,446.449249267578C35.1669175773859,446.018463134766 53.7453324943781,444.442626953125 62.7684343010187,441.718170166016 77.5056817680597,437.915100097656 88.3803460747004,432.609741210938 95.4455239921808,425.795043945313 106.479787603021,415.180816650391 117.854535833001,396.24609375 129.559186711907,368.920806884766L248.105405583978,92.0157241821289C258.150083318353,68.9942779541015 263.161863103509,51.6389007568359 263.161863103509,39.8760452270508 263.161863103509,34.06640625 261.001798406243,29.1182327270508 256.649869695306,25.0315246582031 252.255185857415,20.9413146972656 245.690091863275,17.8596496582031 236.805173650384,15.7059926986694 227.920408025384,13.5558242797851 210.597547307611,12.4807434082031 184.815458074212,12.4807367324829z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Bold Text Icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="boldButton" Click="boldButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,8,5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to change to Bold Style" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M12.919998,36.100098L12.919998,53.220215 24.884003,53.220215C29.540009,53.220215 32.492996,53.080078 33.746002,52.819824 35.667007,52.470215 37.229996,51.620117 38.440002,50.27002 39.647003,48.919922 40.253006,47.100098 40.253006,44.830078 40.253006,42.910156 39.785004,41.279785 38.852997,39.939941 37.921997,38.609863 36.576996,37.629883 34.818008,37.02002 33.056,36.410156 29.234009,36.100098 23.356995,36.100098z M12.919998,10.649902L12.919998,25.450195 21.391006,25.450195C26.425995,25.450195 29.552994,25.379883 30.776001,25.22998 32.988007,24.970215 34.729004,24.209961 35.994995,22.939941 37.259995,21.680176 37.893997,20.009766 37.893997,17.939941 37.893997,15.959961 37.348007,14.359863 36.255997,13.120117 35.165009,11.879883 33.542007,11.129883 31.391006,10.870117 30.109009,10.720215 26.425995,10.649902 20.343994,10.649902z M0,0L25.581009,0C30.647003,0 34.423004,0.20996094 36.910995,0.62988281 39.399994,1.0498047 41.628006,1.9301758 43.591995,3.2700195 45.556,4.6098633 47.193008,6.3901367 48.503006,8.6201172 49.813995,10.850098 50.466003,13.339844 50.466003,16.109863 50.466003,19.100098 49.658997,21.850098 48.046005,24.359863 46.427994,26.859863 44.238007,28.740234 41.475006,29.990234 45.374008,31.129883 48.371002,33.060059 50.466003,35.799805 52.563995,38.529785 53.609009,41.75 53.609009,45.450195 53.609009,48.359863 52.934006,51.189941 51.581009,53.939941 50.227997,56.689941 48.378006,58.890137 46.035995,60.529785 43.693008,62.169922 40.802994,63.189941 37.371002,63.560059 35.216995,63.799805 30.020996,63.939941 21.785004,64L0,64z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Align left Icon-->
+            <Button Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Name="leftButton" Click="leftButton_Click" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,8,5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Align Left" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M0,57.655001L67.002998,57.655001 67.002998,64.000002 0,64.000002z M0,42.505001L38.098999,42.505001 38.098999,48.85 0,48.85z M0,28.294L67.002998,28.294 67.002998,34.639 0,34.639z M0,14.143001L38.098999,14.143001 38.098999,20.488001 0,20.488001z M0,0L67.002998,0 67.002998,6.3460007 0,6.3460007z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Align center Icon-->
+            <Button Click="centerButton_Click" Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,8,5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Align Center" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M0,57.653999L67.001999,57.653999 67.001999,64 0,64z M14.452,42.504L52.550999,42.504 52.550999,48.849998 14.452,48.849998z M0,28.292999L67.001999,28.292999 67.001999,34.638 0,34.638z M14.452,14.143L52.550999,14.143 52.550999,20.487999 14.452,20.487999z M0,0L67.001999,0 67.001999,6.3449993 0,6.3449993z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <!--Align Right Icon-->
+            <Button Click="rightButton_Click" Opacity="0.5" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,8,5,0">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                        <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="-90"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Align Right" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="17" Height="17" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Width="128" Height="128" Visibility="Visible">
+                        <Path Data="M0,57.653999L67.002998,57.653999 67.002998,63.999001 0,63.999001z M28.903999,42.504L67.002998,42.504 67.002998,48.849998 28.903999,48.849998z M0,28.293L67.002998,28.293 67.002998,34.637999 0,34.637999z M28.903999,14.143L67.002998,14.143 67.002998,20.486999 28.903999,20.486999z M0,0L67.002998,0 67.002998,6.3449993 0,6.3449993z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+        </StackPanel>
+
+        <!--Menu Icon-->
+        <Button Opacity="0.5" Cursor="Hand" Click="menu_Click" MouseEnter="Viewbox_MouseEnter" MouseLeave="Viewbox_MouseLeave" Style="{StaticResource MyButtonStyle}" Width="22" Height="22"   Margin="0,40,94,0" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#02EAE8E8" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button.ToolTip>
+                <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Bottom" ToolTipService.HorizontalOffset="-140" >
+                    <ToolTip.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                    </ToolTip.Effect>
+                    <ToolTip.Template>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border >
+                                <StackPanel Orientation="Vertical" Height="350" Width="300"  >
+                                    <Path  Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="-90"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Label Margin="10,-6,10,0" FontSize="15" Content="Click to Show/Hide the Text tools" Background="#FFEAE8E8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </ToolTip.Template>
+                </ToolTip>
+            </Button.ToolTip>
+            <Viewbox   >
+                <Grid Width="128" Height="128" Visibility="Visible">
+                    <Path Name="toolMenu"   Data="M0,15.719L20.584999,15.719 20.584999,21.333 0,21.333z M0,7.8590002L20.584999,7.8590002 20.584999,13.474 0,13.474z M0,0L20.584999,0 20.584999,5.6150002 0,5.6150002z" Stretch="Uniform" Fill="Gray" Width="128" Height="128" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </Button>
+
+    </Grid>
+</UserControl>

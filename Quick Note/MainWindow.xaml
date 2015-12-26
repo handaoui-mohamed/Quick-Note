@@ -1,0 +1,647 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:local="clr-namespace:Quick_Note" 
+        x:Class="Quick_Note.MainWindow"
+        Title="Quick Note" 
+        Height="415.532"    
+        Width="866.093" 
+        MinWidth="770.093"
+        WindowStyle="None"
+        ResizeMode="NoResize" 
+        WindowStartupLocation="Manual"
+        Top="0"
+        AllowsTransparency="True" 
+        Background="{x:Null}" 
+        SnapsToDevicePixels="True"
+        ShowInTaskbar="False" 
+        Topmost="True" 
+        Icon="QuickNote.ico"    
+        Closing="Window_Closing" 
+        KeyDown="Window_KeyDown"
+        Loaded="Window_Loaded"
+        >
+
+    <Window.Resources>
+
+        <Style x:Key="FocusTextBox" TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=addName, Path=IsVisible}" Value="True">
+                    <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=addName}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MyButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="0"
+                            Padding="0" 
+                            CornerRadius="0" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="green" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Storyboard x:Key="animShow" AutoReverse="False" Completed="Storyboard_Completed_noteButton">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,-125,0,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animShowStart" AutoReverse="False" Completed="Storyboard_Completed_noteButton">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:01">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,-125,0,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animHide" AutoReverse="False" >
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,-59,0,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animTextShow" AutoReverse="False">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="30, 0, 30, 0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animTextHide" AutoReverse="False" Completed="Storyboard_Completed">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="30,-364,30,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animStackShow" AutoReverse="False">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,15,60,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animStackHide" AutoReverse="False" Completed="Storyboard_Completed">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,310,60,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animRedShow" AutoReverse="False">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,292,60,0 " />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animRedHide" AutoReverse="False" >
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,-80,60,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animRedStackShow" AutoReverse="False">
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,309,60,0 " />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="animRedStackHide" AutoReverse="False" >
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+
+                <SplineThicknessKeyFrame KeyTime="00:00:0.3" Value="0,-36,60,0" />
+
+
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+    </Window.Resources>
+
+    <Grid >
+
+        <Button Style="{StaticResource MyButtonStyle}"  Click="noteButton_Click"  Cursor="Hand" MouseEnter="noteButton_MouseEnter" MouseLeave="noteButton_MouseLeave" Name="noteButton" Margin="0,-125,0,0" Height="126" VerticalAlignment="Top" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Center"  Width="128">
+
+            <Viewbox >
+                <Grid>
+                    <Ellipse Fill="#FFEE9725" Name="Fill" Visibility="Visible" Height="128" Width="128"  />
+                    <Path Data="M57.063873,8.2469999L57.194774,8.2469999C58.06459,8.2469999,58.770999,8.9514209,58.770999,9.8225261L58.770999,38.854286C58.770999,39.686402 58.124488,40.367417 57.307075,40.424717 56.906971,40.55492 56.374462,40.53672 55.876354,40.273613 48.230434,36.226635 40.325012,36.824349 32.9743,41.024929 31.999685,41.57964 29.228841,40.213814 30.578762,39.441597 38.462085,34.938812 47.255821,34.282601 55.487049,38.005371L55.487049,9.8225261C55.487049,8.9514209,56.192459,8.2469999,57.063873,8.2469999z M1.5765214,7.9829995L1.7070088,7.9829995C2.578099,7.9829999,3.2835305,8.6900875,3.2835302,9.5586101L3.2835302,37.740711C11.514862,34.018036 20.308356,34.675633 28.191061,39.178204 29.541345,39.950298 26.770578,41.31749 25.79599,40.761494 18.445078,36.56102 10.540273,35.963425 2.8941953,40.011498 2.3958411,40.274498 1.8639274,40.291496 1.4628725,40.162499 0.64586639,40.103897 0,39.424301 0,38.589607L0,9.5586101C0,8.6900875,0.70641232,7.9829999,1.5765214,7.9829995z M44.139385,0.16105747C46.482063,0.15614485,49.207069,0.47021243,52.3661,1.2507425L52.368,34.715408C52.368,34.715408,41.521152,29.005823,30.824001,36.980999L31.015398,6.1933586C31.015398,6.1933586,33.987775,0.18234282,44.139385,0.16105747z M14.511298,0.00071966404C24.722303,0.075802114,27.714494,5.9942452,27.714494,5.9942447L27.947002,36.718002C16.608066,29.606054,6.4020005,34.451019,6.4020007,34.451019L6.4039606,0.98775288C9.2928014,0.31748327 11.818138,0.025515687 14.019586,0.0016085565 14.18532,-0.00019056614 14.349218,-0.00047104831 14.511298,0.00071966404z" Stretch="Uniform" Fill="#FFFFFFFF" Width="75" Height="56.333" Margin="26.254,61.667,26.746,0" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <Path.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Path.RenderTransform>
+                    </Path>
+                </Grid>
+            </Viewbox>
+        </Button>
+
+        <ScrollViewer Name="textBlock" Margin="30,-391,30,0" Background="#FFECE9E6" MouseLeave="textBlock_MouseLeave" Visibility="Visible" Height="359" VerticalAlignment="Top">
+            <ItemsControl Name="itemsControl"  HorizontalAlignment="Center" Height="auto" VerticalAlignment="Top" Width="auto" >
+                
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel MouseLeave="redButton_MouseLeave"  Name="redButtonStack" Orientation="Vertical" Margin="0,-36,60,0" Height="8" VerticalAlignment="Top" Background="#02FFFFFF" HorizontalAlignment="Right" Width="41" >
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand" Name="saveButton" Click="saveButton_Click" Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="350"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="250" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Click to Save all the Quick Notes" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="30" Height="30" >
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FF4285F4" Visibility="Collapsed" />
+                            <Ellipse Fill="#FF4285F4" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF4285F4" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M8.1099597,36.94997L8.1099597,41.793968 39.213959,41.793968 39.213959,36.94997z M12.42,0.049999889L18.4,0.049999889 18.4,12.252 12.42,12.252z M0,0L7.9001866,0 7.9001866,14.64218 39.210766,14.64218 39.210766,0 47.401001,0 47.401001,47.917 0,47.917z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand" Name="exportButton" Click="exportButton_Click" Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="450"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="350" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Click to Export all the Quick Notes to Desktop" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="30" Height="30"  Margin="0,-2,0,0">
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FF679417" Visibility="Collapsed" />
+                            <Ellipse Fill="#FF679417" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF679417" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M36.199,45.667C36.952227,46.010012,37.781757,46.213219,38.662689,46.213219L49.918999,46.213219 49.918999,59.145964C49.918999,62.927294 46.840787,66.003 43.057449,66.003 39.277212,66.003 36.199,62.927294 36.199,59.145964z M59.649792,24.517794C60.029982,24.531191,60.454393,24.714476,60.900433,25.085843L64.15827,27.807174C65.741682,29.130087,68.330208,31.294212,69.91362,32.614528L73.171455,35.338458C74.754669,36.661471,74.733971,38.802097,73.129654,40.09381L69.822426,42.755239C68.215605,44.052156,65.587978,46.169378,63.981163,47.458494L60.673834,50.12252C59.069715,51.419437,57.775402,50.336124,57.798807,47.718895L57.843107,42.690142 38.66262,42.690142C37.311006,42.690142,36.215998,41.593826,36.215998,40.242211L36.215998,34.942752C36.215998,33.593738,37.311006,32.494726,38.66262,32.494726L57.934206,32.494726 57.978508,27.439969C57.995398,25.558836,58.678194,24.483558,59.649792,24.517794z M5.6630898,22.645999C8.7816372,22.645999,11.33,25.200673,11.33,28.317742L11.33,46.348759C11.33,49.463427 8.7816372,52.018 5.6630898,52.018 2.5508919,52.018 0,49.463427 0,46.348759L0,28.317742C0,25.200673,2.5508919,22.645999,5.6630898,22.645999z M43.057449,7.6749992C46.840787,7.6749992,49.918999,10.75035,49.918999,14.531539L49.918999,28.971116 38.662689,28.971116C37.781757,28.971116,36.952227,29.17441,36.199,29.518001L36.199,14.531539C36.199,10.75035,39.277212,7.6749992,43.057449,7.6749992z M22.61695,0C26.210511,0,29.131,2.9245415,29.130999,6.5130177L29.130999,38.786243C29.131,42.374819 26.210511,45.294001 22.61695,45.294001 19.027187,45.294001 16.108,42.374819 16.108,38.786243L16.108,6.5130177C16.108,2.9245415,19.027187,0,22.61695,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave"  Cursor="Hand" Name="deleteButton" Click="deleteButton_Click"  Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="350"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="250" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Click to Delete all the Quick Notes" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="30" Height="30"  Margin="0,-2,0,0">
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FF941717" Visibility="Collapsed" />
+                            <Ellipse Fill="#FF941717" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF941717" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M33.977998,27.684L33.977998,58.102997 41.373998,58.102997 41.373998,27.684z M14.841999,27.684L14.841999,58.102997 22.237998,58.102997 22.237998,27.684z M4.0319996,22.433001L52.183,22.433001 52.183,63.999001 4.0319996,63.999001z M15.974,0L40.195001,0 40.195001,7.7260003 56.167001,7.7260003 56.167001,16.000999 0,16.000999 0,7.7260003 15.974,7.7260003z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand"  Name="facebook" Click="facebook_Click" Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="270"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="170" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Find me on Facebook" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="30" Height="30"  Margin="0,-2,0,0">
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FF46629E" Visibility="Collapsed" />
+                            <Ellipse Fill="#FF46629E" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF46629E" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M23.6165060573012,0L430.384402709523,0C443.423587279835,3.09669914599908E-06,454.00000329546,11.7475061416626,454.00000329546,26.2355041503906L454.00000329546,432.763214111328C454.00000329546,447.261413574219,443.423587279835,458.999969482422,430.384402709523,458.999969482422L312.953586059132,458.999969482422 312.953586059132,270.410888671875 369.386996703664,270.410888671875 369.386996703664,209.151611328125 312.953586059132,209.151611328125 312.953586059132,188.616561889648C312.953586059132,173.706848144531,324.834353881398,161.6142578125,339.540500121632,161.6142578125L369.386996703664,161.6142578125 369.386996703664,100.374084472656 304.767489867726,100.374084472656C265.503940063039,100.374084472656,233.701312499562,132.666168212891,233.701312499562,172.518341064453L233.701312499562,209.151611328125 182.773654418507,209.151611328125 182.773654418507,270.410888671875 233.701312499562,270.410888671875 233.701312499562,458.999969482422 23.6165060573012,458.999969482422C10.5764050059706,458.999969482422,3.29546037391992E-06,447.261413574219,0,432.763214111328L0,26.2355041503906C3.29546037391992E-06,11.7475061416626,10.5764050059706,3.09669914599908E-06,23.6165060573012,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand"  Name="email" Click="email_Click" Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="270"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="170" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Find me on Google+" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+
+                <Viewbox Width="30" Height="30"  Margin="0,-2,0,0">
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FFB71000" Visibility="Collapsed" />
+                            <Ellipse Fill="#FFB71000" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FFF95F10" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M21.412441,42.860001C21.906038,42.860001 22.150736,42.860001 22.542833,42.905701 26.253611,45.505823 27.863001,46.804134 27.863001,49.263756 27.863001,52.249481 25.374716,54.476002 20.679445,54.476002 15.451578,54.476002 12.082,52.013779 12.082,48.593151 12.082,45.17252 15.20158,44.018909 16.281073,43.629606 18.33576,42.9512 20.972343,42.860001 21.412441,42.860001z M44.261799,29.53775L44.261799,36.900175 36.923302,36.900175 36.923302,41.919827 44.261799,41.919827 44.261799,49.229549 49.242298,49.229549 49.242298,41.919827 56.6161,41.919827 56.6161,36.900175 49.242298,36.900175 49.242298,29.53775z M19.019857,21.360001C23.074421,21.360001 25.176001,26.756422 25.176001,30.235055 25.176001,31.093163 25.077101,32.631577 23.961012,33.744287 23.17342,34.513794 21.860832,35.101 20.629143,35.101 16.432682,35.101 14.512,29.74475 14.512,26.51372 14.512,25.263708 14.764598,23.961036 15.59419,22.961026 16.381783,21.985007 17.75017,21.360001 19.019857,21.360001z M22.097799,19.7377C19.4636,19.7377 16.131599,20.138817 13.3555,22.410223 11.2449,24.182296 10.2136,26.650281 10.2136,28.869757 10.2136,32.62952 13.1564,36.444582 18.3361,36.444582 18.824301,36.444582 19.362101,36.393881 19.906401,36.348181 19.656401,36.931576 19.4104,37.417171 19.4104,38.225763 19.4104,39.725748 20.1915,40.638639 20.879,41.499229 18.6759,41.650127 14.5691,41.893826 11.5483,43.723007 8.6563702,45.411791 7.7761202,47.874165 7.7761202,49.604546 7.7761202,53.172211 11.1929,56.493877 18.281401,56.493877 26.6877,56.493877 31.136801,51.917023 31.136801,47.385868 31.136801,44.068203 29.1877,42.422321 27.038,40.638639L25.281401,39.285652C24.7423,38.859858 24,38.275263 24,37.217974 24,36.163284 24.7423,35.479691 25.375099,34.850798 27.4298,33.268114 29.4858,31.494631 29.4858,27.929667 29.4858,24.263715 27.129,22.410224 26.006599,21.336014L29.035299,21.336014 32.168098,19.7377z M0,14.769001L64,14.769001 64,51.46003C64,58.354458,58.355499,63.999001,51.457199,63.999001L12.5432,63.999001C5.6445298,63.999001,0,58.354458,0,51.46003z M12.543236,0L51.457134,0C58.173214,9.5367432E-07,63.6563,5.3606014,63.944,12L0.055000305,12C0.34406164,5.3606014,5.8270831,9.5367432E-07,12.543236,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="30" Height="30" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand" Name="about"   Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9" 
+                         OverridesDefaultStyle="True"
+                         HasDropShadow="True" ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="250" ToolTipService.VerticalOffset="-120" >
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="300" Width="575" >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="250" Width="247" Margin="10,10,-22,0" VerticalAlignment="Top">
+                                            <Label FontSize="15" FontWeight="Bold" Content="Quick Note" HorizontalAlignment="Center" />
+                                            <Viewbox Height="90" Width="90">
+                                                <Grid>
+                                                    <Grid  Width="256" Height="256" Visibility="Visible">
+                                                        <Ellipse Fill="#FFEE9725" Visibility="Visible" />
+                                                    </Grid>
+                                                    <Path Data="M57.063873,8.2469999L57.194774,8.2469999C58.06459,8.2469999,58.770999,8.9514209,58.770999,9.8225261L58.770999,38.854286C58.770999,39.686402 58.124488,40.367417 57.307075,40.424717 56.906971,40.55492 56.374462,40.53672 55.876354,40.273613 48.230434,36.226635 40.325012,36.824349 32.9743,41.024929 31.999685,41.57964 29.228841,40.213814 30.578762,39.441597 38.462085,34.938812 47.255821,34.282601 55.487049,38.005371L55.487049,9.8225261C55.487049,8.9514209,56.192459,8.2469999,57.063873,8.2469999z M1.5765214,7.9829995L1.7070088,7.9829995C2.578099,7.9829999,3.2835305,8.6900875,3.2835302,9.5586101L3.2835302,37.740711C11.514862,34.018036 20.308356,34.675633 28.191061,39.178204 29.541345,39.950298 26.770578,41.31749 25.79599,40.761494 18.445078,36.56102 10.540273,35.963425 2.8941953,40.011498 2.3958411,40.274498 1.8639274,40.291496 1.4628725,40.162499 0.64586639,40.103897 0,39.424301 0,38.589607L0,9.5586101C0,8.6900875,0.70641232,7.9829999,1.5765214,7.9829995z M44.139385,0.16105747C46.482063,0.15614485,49.207069,0.47021243,52.3661,1.2507425L52.368,34.715408C52.368,34.715408,41.521152,29.005823,30.824001,36.980999L31.015398,6.1933586C31.015398,6.1933586,33.987775,0.18234282,44.139385,0.16105747z M14.511298,0.00071966404C24.722303,0.075802114,27.714494,5.9942452,27.714494,5.9942447L27.947002,36.718002C16.608066,29.606054,6.4020005,34.451019,6.4020007,34.451019L6.4039606,0.98775288C9.2928014,0.31748327 11.818138,0.025515687 14.019586,0.0016085565 14.18532,-0.00019056614 14.349218,-0.00047104831 14.511298,0.00071966404z" Stretch="Uniform" Fill="#FFFFFFFF" Width="138" Height="138" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                                        <Path.RenderTransform>
+                                                            <TransformGroup>
+                                                                <TransformGroup.Children>
+                                                                    <RotateTransform Angle="0" />
+                                                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                                </TransformGroup.Children>
+                                                            </TransformGroup>
+                                                        </Path.RenderTransform>
+                                                    </Path>
+                                                </Grid>
+                                            </Viewbox>
+                                            <Label Content="Created By" HorizontalAlignment="Center"/>
+                                            <Label Content="Handaoui Mohamed" HorizontalAlignment="Center"/>
+                                            <Label Content="Email : handaoui.mohamed@gmail.com" HorizontalAlignment="Center"/>
+                                            <Label Content="Tel : +213556587488" HorizontalAlignment="Center"/>
+                                            <Label Content="Thank you ^_^" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L156.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="156" Height="250" VerticalAlignment="Top" Margin="-25,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox >
+                    <Grid>
+                        <Grid  Width="30" Height="30" Visibility="Visible">
+                            <Ellipse Fill="#FF000000"  Visibility="Visible" />
+                        </Grid>
+                        <Path Data="M0.083000104,16.5L9.4169997,16.5 9.4169997,53.834 0.083000104,53.834z M4.7499999,0C7.3722199,0 9.4999999,2.1269503 9.4999999,4.75 9.4999999,7.3740196 7.3722199,9.5 4.7499999,9.5 2.12756,9.5 4.4703484E-08,7.3740196 0,4.75 4.4703484E-08,2.1269503 2.12756,0 4.7499999,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="22" Height="22" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+            <Button MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" Cursor="Hand"  Name="exit" Click="exit_Click" Style="{StaticResource MyButtonStyle}" Foreground="{x:Null}">
+
+                <Button.ToolTip>
+                    <ToolTip  Opacity="0.9"  
+                        
+                         HasDropShadow="True" ToolTipService.Placement="Left"  ToolTipService.VerticalOffset="-23" ToolTipService.HorizontalOffset="5">
+                        <ToolTip.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3" RenderingBias="Quality" Direction="270" Opacity="0.5"/>
+                        </ToolTip.Effect>
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Border >
+                                    <StackPanel Orientation="Horizontal" Height="70" Width="270"  >
+                                        <StackPanel Orientation="Vertical" Background="#FFEAE8E8" Height="50" Width="170" Margin="50,10,0,0" VerticalAlignment="Top" >
+                                            <Label FontSize="15" Content="Click to close and Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                        <Path Data="M0,0L496.000005990267,315 0,630z" Stretch="Uniform" Fill="#FFEAE8E8" Width="50" Height="50" VerticalAlignment="Top" Margin="-5,10,0,0"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Viewbox Width="30" Height="30"  Margin="0,-2,0,0">
+                    <Grid Width="48" Height="48" Visibility="Visible">
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FF530101" Visibility="Collapsed" />
+                            <Ellipse Fill="#FF530101" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FF530101" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Data="M34.201,35.752792L36.154999,37.072937 36.154999,61.028999 26.27,61.028999 26.27,58.465 34.201,58.465z M18.94405,30.222998C17.962244,30.222998 17.167,31.018967 17.167,32.00045 17.167,32.982033 17.962244,33.778 18.94405,33.778 19.925556,33.778 20.721001,32.982033 20.721001,32.00045 20.721001,31.018967 19.925556,30.222998 18.94405,30.222998z M44.257435,25.653L44.257435,29.183289 51.842999,29.183289 51.842999,35.705292 44.257435,35.705292 44.257435,39.237999 34.201,32.444984z M26.27,3.8619995L36.154999,3.8619995 36.154999,27.81745 34.201,29.137484 34.201,6.2989998 26.27,6.2989998z M24.27,0L24.27,64 0,60 0,4.0000029z" Stretch="Uniform" Fill="#FFFFFFFF" Width="28" Height="28" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <RotateTransform Angle="0" />
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+            </Button>
+
+
+        </StackPanel>
+
+        <Viewbox Name="redButton"  Visibility="Visible" Margin="765,-80,60,0" Height="40" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Viewbox.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="10" Direction="320" Color="Red" Opacity="10"/>
+            </Viewbox.Effect>
+            <Grid Width="40" Height="40">
+                <Grid Visibility="Visible">
+
+                    <Ellipse Fill="#FFDB4437" Visibility="Visible" />
+                    <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FFDB4437" Visibility="Collapsed" />
+                </Grid>
+                <Path  Data="M14.612988,5.9333107C14.422489,5.9333107,14.231999,6.0060582,14.08701,6.1515532L4.8600375,15.377618C4.5699989,15.668108 4.5699989,16.138691 4.8600375,16.429177 5.1509916,16.719568 5.621999,16.719568 5.9120376,16.429177L15.13901,7.2036138C15.428988,6.9125252 15.428988,6.441843 15.13901,6.1515532 14.99399,6.0060582 14.803485,5.9333107 14.612988,5.9333107z M14.71799,2.1339991L19.199,6.6144361 6.0930063,19.71876 0,21.332 1.6140107,15.237921z M18.004711,2.3841858E-06C18.828221,-0.0010273457 19.680306,0.33339667 20.339062,0.99312294 21.582077,2.2346605 21.671078,4.1580737 20.539065,5.2889988L16.044014,0.79320061C16.573708,0.26298583,17.278086,0.00091075897,18.004711,2.3841858E-06z" Stretch="Uniform" Fill="#FFFFFFFF" Width="25" Height="25" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                </Path>
+            </Grid>
+
+        </Viewbox>
+
+        <Button Click="redButton_Click"  Style="{StaticResource MyButtonStyle}" Cursor="Hand" Name="redButton2"  MouseLeave="redButton_MouseLeave" MouseEnter="redButton_MouseEnter"  Margin="0,-80,60,0" Height="40" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Right" Width="41" >
+            <Viewbox >
+                <Grid Name="plusButton" >
+
+                    <Grid   Width="48" Height="48" Visibility="Visible">
+
+                        <Grid Visibility="Visible">
+                            <Rectangle Fill="#FFDB4437" Visibility="Collapsed" />
+                            <Ellipse Fill="#FFDB4437" Visibility="Visible" />
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FFDB4437" Visibility="Collapsed" />
+                        </Grid>
+                        <Path Name="plus" Data="M116.985618665814,0L181.145370557904,0 181.145370557904,121.251022338867 298.130981519818,121.251022338867 298.130981519818,187.749847412109 181.145370557904,187.749847412109 181.145370557904,309 116.985618665814,309 116.985618665814,187.749847412109 0,187.749847412109 0,121.251022338867 116.985618665814,121.251022338867z" Stretch="Uniform" Fill="#FFFFFFFF" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                        </Path>
+                    </Grid>
+                </Grid>
+
+            </Viewbox>
+
+        </Button>
+
+        <StackPanel  Visibility="Visible" Name="text" Margin="30,-391,30,0" VerticalAlignment="Top" Height="359">
+
+
+            <Viewbox Margin="0,50,0,0" Height="128" Width="128">
+                <Viewbox.Effect>
+                    <BlurEffect Radius="3"/>
+                </Viewbox.Effect>
+                <Grid>
+                    <Grid  Width="256" Height="256" Visibility="Visible">
+                        <Ellipse Fill="#FFEE9725" Visibility="Visible" />
+                    </Grid>
+                    <Path Data="M57.063873,8.2469999L57.194774,8.2469999C58.06459,8.2469999,58.770999,8.9514209,58.770999,9.8225261L58.770999,38.854286C58.770999,39.686402 58.124488,40.367417 57.307075,40.424717 56.906971,40.55492 56.374462,40.53672 55.876354,40.273613 48.230434,36.226635 40.325012,36.824349 32.9743,41.024929 31.999685,41.57964 29.228841,40.213814 30.578762,39.441597 38.462085,34.938812 47.255821,34.282601 55.487049,38.005371L55.487049,9.8225261C55.487049,8.9514209,56.192459,8.2469999,57.063873,8.2469999z M1.5765214,7.9829995L1.7070088,7.9829995C2.578099,7.9829999,3.2835305,8.6900875,3.2835302,9.5586101L3.2835302,37.740711C11.514862,34.018036 20.308356,34.675633 28.191061,39.178204 29.541345,39.950298 26.770578,41.31749 25.79599,40.761494 18.445078,36.56102 10.540273,35.963425 2.8941953,40.011498 2.3958411,40.274498 1.8639274,40.291496 1.4628725,40.162499 0.64586639,40.103897 0,39.424301 0,38.589607L0,9.5586101C0,8.6900875,0.70641232,7.9829999,1.5765214,7.9829995z M44.139385,0.16105747C46.482063,0.15614485,49.207069,0.47021243,52.3661,1.2507425L52.368,34.715408C52.368,34.715408,41.521152,29.005823,30.824001,36.980999L31.015398,6.1933586C31.015398,6.1933586,33.987775,0.18234282,44.139385,0.16105747z M14.511298,0.00071966404C24.722303,0.075802114,27.714494,5.9942452,27.714494,5.9942447L27.947002,36.718002C16.608066,29.606054,6.4020005,34.451019,6.4020007,34.451019L6.4039606,0.98775288C9.2928014,0.31748327 11.818138,0.025515687 14.019586,0.0016085565 14.18532,-0.00019056614 14.349218,-0.00047104831 14.511298,0.00071966404z" Stretch="Uniform" Fill="#FFFFFFFF" Width="138" Height="138" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        <Path.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Path.RenderTransform>
+                    </Path>
+                </Grid>
+            </Viewbox>
+
+            <TextBlock Visibility="Visible" Margin="262,30,256,0" TextWrapping="Wrap" Text="Click on the Red Button or CTRL+N to Add a Quick Note " VerticalAlignment="Top" FontSize="22" Height="64" TextAlignment="Center" TextDecorations="{x:Null}" FontFamily="Segoe UI Symbol">
+                <TextBlock.Effect>
+                    <BlurEffect Radius="2"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <Viewbox Height="50" Width="50" Margin="0,0,0,0">
+                <Viewbox.Effect>
+                    <BlurEffect Radius="2"/>
+                </Viewbox.Effect>
+                <Grid Width="48" Height="48" Visibility="Visible">
+                    <Grid Visibility="Visible">
+                        <Rectangle Fill="#FFDB4437" Visibility="Collapsed" />
+                        <Ellipse Fill="#FFDB4437" Visibility="Visible" />
+                        <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" Stretch="Fill" Fill="#FFDB4437" Visibility="Collapsed" />
+                    </Grid>
+                    <Path Data="M116.985618665814,0L181.145370557904,0 181.145370557904,121.251022338867 298.130981519818,121.251022338867 298.130981519818,187.749847412109 181.145370557904,187.749847412109 181.145370557904,309 116.985618665814,309 116.985618665814,187.749847412109 0,187.749847412109 0,121.251022338867 116.985618665814,121.251022338867z" Stretch="Uniform" Fill="#FFFFFFFF" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+
+                    </Path>
+                </Grid>
+            </Viewbox>
+
+
+        </StackPanel>
+
+        <Grid  Name="addGrid" KeyDown="addGrid_KeyDown" Height="359" Margin="30,0" VerticalAlignment="Top" Visibility="Hidden" Opacity="0" Background="#99000000" Style="{StaticResource FocusTextBox}">
+            <Grid Height="124"  VerticalAlignment="Center"  >
+                <Rectangle Fill="White" Margin="0,0,0,0"/>
+                <UniformGrid VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+
+                    <Button x:Name="add" Click="add_Click" Content="Add Quick Note" HorizontalAlignment="Left" Margin="0,0,150,-18" VerticalAlignment="Top" Width="92" Height="36"/>
+                    <Button x:Name="cancel" Click="cancel_Click"  Content="Cancel" HorizontalAlignment="Right" Margin="0,0,0,-18" VerticalAlignment="Top" Width="96" Height="36"/>
+
+                </UniformGrid>
+
+                <UniformGrid HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="10">
+                    <StackPanel Margin="412,7,-314,-31" Orientation="Vertical" HorizontalAlignment="Left" Width="auto">
+                        <CheckBox  x:Name="addChecked" Content="Current Date" HorizontalAlignment="Left" VerticalAlignment="Top" Click="addChecked_Checked"/>
+                        <TextBox  x:Name="addDate" HorizontalAlignment="Left" Height="26" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216" />
+                    </StackPanel>
+                    <StackPanel Margin="-314,0,406,-26" Orientation="Vertical" Height="auto" Width="auto"  HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Enter The Quick Note name :"/>
+                        <TextBox x:Name="addName" Height="26" Width="216" TextWrapping="Wrap" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </UniformGrid>
+            </Grid>
+        </Grid>
+
+        <Grid Name="deleteDialog"  KeyDown="addGrid_KeyDown" Height="359" Margin="30,0" VerticalAlignment="Top" Visibility="Hidden" Opacity="0" Background="#99000000" Style="{StaticResource FocusTextBox}">
+            <Grid Height="124"  VerticalAlignment="Center"  >
+                <Rectangle Fill="White" Margin="0,0,0,0"/>
+                <UniformGrid Margin="0,78,0,0" HorizontalAlignment="Center" Width="400">
+                    <Button  Click="yesButton_Click" Content="Yes" Margin="0,0,0,-18" HorizontalAlignment="Left" Width="92"/>
+                    <Button x:Name="noButton" Click="noButton_Click" Content="No" Margin="0,0,0,-18" HorizontalAlignment="Right" Width="96"/>
+                </UniformGrid>
+                <Label Name="deleteQuestion" Content="Are you sure you want to delete this Quick Note ?" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

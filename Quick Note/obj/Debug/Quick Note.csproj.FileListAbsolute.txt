@@ -1,0 +1,17 @@
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\bin\Debug\Quick Note.exe
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\bin\Debug\Quick Note.pdb
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\MainWindow.baml
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\MainWindow.g.cs
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\App.g.cs
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note_MarkupCompile.cache
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note.g.resources
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note.exe
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note.pdb
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\TextBlocks.baml
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\TextBlocks.g.cs
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note_MarkupCompile.lref
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\obj\Debug\Quick Note.csprojResolveAssemblyReference.cache
+C:\Users\Handaoui Mohamed\Documents\Expression\Blend 4\Projects\Quick Note\Quick Note\bin\Debug\Quick Note.exe.config
+C:\Users\Handaoui Mohamed\Source\Repos\Quick-Note\Quick Note\bin\Debug\Quick Note.exe.config
+C:\Users\Handaoui Mohamed\Source\Repos\Quick-Note\Quick Note\obj\Debug\Quick Note.exe
+C:\Users\Handaoui Mohamed\Source\Repos\Quick-Note\Quick Note\obj\Debug\Quick Note.pdb
